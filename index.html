@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BBC Bangla</title>
+
+    <!-- daisyui + tailwind (browser build) -->
     <link
       href="https://cdn.jsdelivr.net/npm/daisyui@5"
       rel="stylesheet"
@@ -22,31 +24,58 @@
       * {
         font-family: "Noto Serif Bengali", serif;
       }
-      /* ছোট ফোনে nav scrollbar দেখাতে একটু নরম স্টাইল */
+
+      /* small scrollbar for category on mobile */
       #categoryContainer::-webkit-scrollbar {
         height: 8px;
       }
       #categoryContainer::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.15);
+        background-color: rgba(0, 0, 0, 0.12);
         border-radius: 999px;
+      }
+
+      /* ensure modal images are responsive */
+      #modalContainer img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0.5rem 0;
+      }
+
+      /* small tweak: make "Loading" look like a card not a full red bar */
+      .loading-card {
+        background-color: #ef4444; /* red-500 */
+        color: white;
+        padding: 0.75rem;
+        border-radius: 0.375rem;
+        max-width: 100%;
       }
     </style>
   </head>
 
-  <body>
+  <body class="bg-gray-50">
     <header>
-      <div class="bg-red-600 py-5">
+      <div class="bg-red-600 py-4">
         <div class="max-w-7xl mx-auto px-5 flex items-center justify-between">
-          <img class="invert h-8 md:h-12" src="./assets/logo.svg" alt="logo" />
-          <!-- optional small tagline or something could go here -->
+          <!-- logo + title grouped so it doesn't wrap weird on mobile -->
+          <div class="flex items-center gap-3">
+            <!-- replace the src below with ./assets/logo.svg if you have it; using uploaded image path as fallback -->
+            <img
+              class="invert h-8 md:h-12"
+              src="./assets/logo.svg"
+              alt="logo"
+            />
+          </div>
+
+          <!-- small title for mobile -->
         </div>
       </div>
 
-      <!-- Nav: mobile-friendly horizontal scroll, font smaller on small screens -->
+      <!-- categories: horizontal scroll on mobile, normal on md+ -->
       <nav class="border-b border-gray-200">
         <ul
           id="categoryContainer"
-          class="flex gap-6 md:gap-10 text-base md:text-lg max-w-7xl mx-auto px-5 py-2 overflow-x-auto whitespace-nowrap"
+          class="flex gap-4 md:gap-10 text-sm md:text-lg max-w-7xl mx-auto px-5 py-2 overflow-x-auto whitespace-nowrap"
         ></ul>
       </nav>
     </header>
@@ -54,26 +83,27 @@
     <main
       class="max-w-7xl mx-auto px-5 mt-5 grid grid-cols-1 md:grid-cols-4 gap-5"
     >
-      <!-- News area: mobile 1 column, md+ = original 3 columns (col-span-3) -->
+      <!-- News area: mobile 1 col, md+ 3 columns -->
       <div
-        class="grid grid-cols-1 md:grid-cols-3 gap-5 col-span-3"
         id="newsContainer"
+        class="grid grid-cols-1 md:grid-cols-3 gap-5 col-span-3"
       >
-        <div class="bg-red-500 p-3">Loading...</div>
+        <div class="loading-card">Loading...</div>
       </div>
 
-      <!-- Bookmark: on mobile this will naturally move under news (because main grid is 1 col) -->
-      <div class="col-span-1 border border-gray-300 rounded-lg overflow-hidden">
+      <!-- Bookmark: moves below on mobile automatically -->
+      <aside
+        class="col-span-1 border border-gray-300 rounded-lg overflow-hidden bg-white"
+      >
         <div class="bg-red-500 text-white p-3">
           <h1 class="text-lg">Bookmark</h1>
           <p id="bookmarkCount">0</p>
         </div>
-
-        <div id="bookmarkContainer" class="p-2 space-y-2"></div>
-      </div>
+        <div id="bookmarkContainer" class="p-3 space-y-2"></div>
+      </aside>
     </main>
 
-    <!-- Modal: make modal box responsive (nearly full width on small screens) -->
+    <!-- modal -->
     <dialog id="news-details-modal" class="modal">
       <div class="modal-box w-[95vw] max-w-3xl md:max-w-4xl">
         <div id="modalContainer"></div>
@@ -85,98 +115,7 @@
       </div>
     </dialog>
 
-    <!-- keep your script.js unchanged; layout/responsive handled via Tailwind classes above -->
-    <script src="./script.js"></script>
-  </body>
-</html>
-<!DOCTYPE html>
-<html lang="bn">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BBC Bangla</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@5"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
-
-    <style>
-      * {
-        font-family: "Noto Serif Bengali", serif;
-      }
-      /* ছোট ফোনে nav scrollbar দেখাতে একটু নরম স্টাইল */
-      #categoryContainer::-webkit-scrollbar {
-        height: 8px;
-      }
-      #categoryContainer::-webkit-scrollbar-thumb {
-        background-color: rgba(0, 0, 0, 0.15);
-        border-radius: 999px;
-      }
-    </style>
-  </head>
-
-  <body>
-    <header>
-      <div class="bg-red-600 py-5">
-        <div class="max-w-7xl mx-auto px-5 flex items-center justify-between">
-          <img class="invert h-8 md:h-12" src="./assets/logo.svg" alt="logo" />
-          <!-- optional small tagline or something could go here -->
-        </div>
-      </div>
-
-      <!-- Nav: mobile-friendly horizontal scroll, font smaller on small screens -->
-      <nav class="border-b border-gray-200">
-        <ul
-          id="categoryContainer"
-          class="flex gap-6 md:gap-10 text-base md:text-lg max-w-7xl mx-auto px-5 py-2 overflow-x-auto whitespace-nowrap"
-        ></ul>
-      </nav>
-    </header>
-
-    <main
-      class="max-w-7xl mx-auto px-5 mt-5 grid grid-cols-1 md:grid-cols-4 gap-5"
-    >
-      <!-- News area: mobile 1 column, md+ = original 3 columns (col-span-3) -->
-      <div
-        class="grid grid-cols-1 md:grid-cols-3 gap-5 col-span-3"
-        id="newsContainer"
-      >
-        <div class="bg-red-500 p-3">Loading...</div>
-      </div>
-
-      <!-- Bookmark: on mobile this will naturally move under news (because main grid is 1 col) -->
-      <div class="col-span-1 border border-gray-300 rounded-lg overflow-hidden">
-        <div class="bg-red-500 text-white p-3">
-          <h1 class="text-lg">Bookmark</h1>
-          <p id="bookmarkCount">0</p>
-        </div>
-
-        <div id="bookmarkContainer" class="p-2 space-y-2"></div>
-      </div>
-    </main>
-
-    <!-- Modal: make modal box responsive (nearly full width on small screens) -->
-    <dialog id="news-details-modal" class="modal">
-      <div class="modal-box w-[95vw] max-w-3xl md:max-w-4xl">
-        <div id="modalContainer"></div>
-        <div class="modal-action">
-          <form method="dialog">
-            <button class="btn">Close</button>
-          </form>
-        </div>
-      </div>
-    </dialog>
-
-    <!-- keep your script.js unchanged; layout/responsive handled via Tailwind classes above -->
+    <!-- keep your existing script.js file; this HTML expects it at the same folder level -->
     <script src="./script.js"></script>
   </body>
 </html>
